@@ -1,0 +1,6 @@
+# binaries and build objects
+**/**/bin
+**/**/obj
+
+# vs
+.vs

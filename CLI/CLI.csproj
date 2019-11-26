@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.5.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Sysaxis</Authors>
+    <Company>Sysaxis</Company>
+    <RepositoryUrl>https://github.com/sysaxis/cs-cli</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/sysaxis/cs-cli/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryType>Git</RepositoryType>
+    <Description>Simple CLI builder for NETCore applications</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="CLI2.cs" />
+  </ItemGroup>
+
+</Project>
