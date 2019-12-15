@@ -74,7 +74,7 @@ namespace CLI
 
         public static Args Parse(string input)
         {
-            string[] parts = input.Split(' ');
+            string[] parts = input.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             return Parse(parts);
         }
@@ -99,7 +99,26 @@ namespace CLI
 
                     if (subparts.Length == 2)
                     {
-                        arg.RawValue = subparts[1];
+                        if (subparts[1].StartsWith("\""))
+                        {
+                            arg.RawValue = subparts[1].Substring(1);
+                            while (++k < parts.Length)
+                            {
+                                if (parts[k].EndsWith("\""))
+                                {
+                                    arg.RawValue += " " + parts[k].Substring(0, parts[k].Length - 1);
+                                    break;
+                                }
+                                else
+                                {
+                                    arg.RawValue += " " + parts[k];
+                                }
+                            }
+                        }
+                        else
+                        {
+                            arg.RawValue = subparts[1];
+                        }
                     }
                     args.Add(arg);
                     arg = null;
