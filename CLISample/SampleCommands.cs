@@ -29,7 +29,20 @@ namespace CLISample
                     }
                 }
             };
-            
+
+            new Command
+            {
+                Namespace = "sample two",
+                Handler = args =>
+                {
+                    Console.WriteLine("i am sample two!");
+                }
+            };
+
+            new Command
+            {
+                Namespace = "no handler"
+            };
         }
     }
 }

@@ -76,6 +76,11 @@ namespace CLI
         {
             string[] parts = input.Split(' ');
 
+            return Parse(parts);
+        }
+
+        public static Args Parse(string[] parts)
+        {
             Args args = new Args();
 
             int k = -1;
@@ -191,6 +196,52 @@ namespace CLI
             Console.Write(Prompt);
         }
 
+        private void RunStartupCommand(string[] args)
+        {
+            if (args.Length == 0)
+            {
+                return;
+            }
+
+            string input = args.Aggregate((s, e) => s + " " + e);
+            string @namespace = "";
+
+            int k = input.IndexOf(" -");
+            if (k > -1)
+            {
+                @namespace = input.Substring(0, k);
+            }
+            else
+            {
+                @namespace = input;
+            }
+
+            Command command = Find(c => c.Namespace == @namespace);
+            if (command == null)
+            {
+                return;
+            }
+
+            if (command.Handler == null)
+            {
+                Console.WriteLine($"Command '{@namespace}' has no action!");
+                Environment.Exit(-1);
+                return;
+            }
+
+            Args arguments = Args.Parse(args);
+            try
+            {
+                command.Handler.Invoke(arguments);
+                Environment.Exit(0);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Environment.Exit(-1);
+            }
+        }
+
         private void Run(string input)
         {
             string @namespace = "";
@@ -263,8 +314,13 @@ namespace CLI
             Console.CursorLeft = Prompt.Length;
         }
 
-        public void Initialize()
+        public void Initialize(string[] args = null)
         {
+            if (args != null)
+            {
+                RunStartupCommand(args);
+            }
+
             Console.CancelKeyPress += (o, e) =>
             {
                 Environment.Exit(0);

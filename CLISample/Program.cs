@@ -18,7 +18,7 @@ namespace CLISample
             new SampleCommands();
 
             // start command line loop
-            commands.Initialize();
+            commands.Initialize(args);
         }
     }
 }
