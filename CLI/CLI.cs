@@ -164,6 +164,9 @@ namespace CLI
     {
         public string Namespace { get; set; }
         public Action<Args> Handler { get; set; }
+        public string Description { get; set; }
+        public string Example { get; set; }
+        public string[] Examples { get; set; }
 
         private static Commands CommandsRef;
 
@@ -292,7 +295,22 @@ namespace CLI
         {
             ForEach(command =>
             {
-                Console.WriteLine("\t" + command.Namespace);
+                Console.WriteLine("\t> " + command.Namespace);
+                if (command.Description != null)
+                {
+                    Console.WriteLine("\t\t" + command.Description);
+                }
+                if (command.Example != null)
+                {
+                    Console.WriteLine("\t\texample: " + command.Example);
+                }
+                if (command.Examples != null)
+                {
+                    foreach(string example in command.Examples)
+                    {
+                        Console.WriteLine("\t\texample: " + example);
+                    }
+                }
             });
             Write();
         }
