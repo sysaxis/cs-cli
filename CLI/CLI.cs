@@ -353,8 +353,13 @@ namespace CLI
 
         public void Initialize(string[] args = null)
         {
-            if (args != null)
+            if (args?.Length > 0)
             {
+                if (args[0] == "--help")
+                {
+                    PrintCommands();
+                    Environment.Exit(0);
+                }
                 RunStartupCommand(args);
             }
 
