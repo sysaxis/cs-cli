@@ -241,6 +241,8 @@ namespace CLI
             Command command = Find(c => c.Namespace == @namespace);
             if (command == null)
             {
+                Console.WriteLine($"Command '{@namespace}' not found!");
+                Environment.Exit(-1);
                 return;
             }
 
