@@ -162,7 +162,18 @@ namespace CLI
 
     public class Command
     {
-        public string Namespace { get; set; }
+        public string Name { get; set; }
+        [Obsolete("Namespace is deprecated, use Name instead")]
+        public string Namespace {
+            get
+            {
+                return Name;
+            }
+            set
+            {
+                Name = value;
+            }
+        }
         public Action<Args> Handler { get; set; }
         public string Description { get; set; }
         public string Example { get; set; }
@@ -186,14 +197,14 @@ namespace CLI
             {
                 if (Handler == null)
                 {
-                    Console.WriteLine("Command \"{0}\" has no action!", Namespace);
+                    Console.WriteLine("Command \"{0}\" has no action!", Name);
                     return;
                 }
                 Handler.Invoke(args);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Command \"{0}\" returned with an exception: {1}", Namespace, ex.Message);
+                Console.WriteLine("Command \"{0}\" returned with an exception: {1}", Name, ex.Message);
                 Console.WriteLine("Stacktrace {0}", ex.StackTrace);
             }
         }
@@ -226,29 +237,29 @@ namespace CLI
             }
 
             string input = args.Aggregate((s, e) => s + " " + e);
-            string @namespace = "";
+            string name = "";
 
             int k = input.IndexOf(" -");
             if (k > -1)
             {
-                @namespace = input.Substring(0, k);
+                name = input.Substring(0, k);
             }
             else
             {
-                @namespace = input;
+                name = input;
             }
 
-            Command command = Find(c => c.Namespace == @namespace);
+            Command command = Find(c => c.Name == name);
             if (command == null)
             {
-                Console.WriteLine($"Command '{@namespace}' not found!");
+                Console.WriteLine($"Command '{name}' not found!");
                 Environment.Exit(-1);
                 return;
             }
 
             if (command.Handler == null)
             {
-                Console.WriteLine($"Command '{@namespace}' has no action!");
+                Console.WriteLine($"Command '{name}' has no action!");
                 Environment.Exit(-1);
                 return;
             }
@@ -268,24 +279,24 @@ namespace CLI
 
         private void Run(string input)
         {
-            string @namespace = "";
+            string name = "";
             string rawArgs = "";
 
             int k = input.IndexOf(" -");
             if (k > -1)
             {
-                @namespace = input.Substring(0, k);
+                name = input.Substring(0, k);
                 rawArgs = input.Substring(k + 1);
             }
             else
             {
-                @namespace = input;
+                name = input;
             }
 
-            Command command = Find(c => c.Namespace == @namespace);
+            Command command = Find(c => c.Name == name);
             if (command == null)
             {
-                Console.WriteLine("Command {0} not found!", @namespace);
+                Console.WriteLine("Command {0} not found!", name);
                 return;
             }
 
@@ -297,7 +308,7 @@ namespace CLI
         {
             ForEach(command =>
             {
-                Console.WriteLine("\t> " + command.Namespace);
+                Console.WriteLine("\t> " + command.Name);
                 if (command.Description != null)
                 {
                     Console.WriteLine("\t\t" + command.Description);

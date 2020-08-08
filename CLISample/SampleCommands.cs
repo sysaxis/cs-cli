@@ -13,7 +13,7 @@ namespace CLISample
         {
             new Command
             {
-                Namespace = "test cli",
+                Name = "test cli",
                 Description = "pass different args to showcase arg parsing",
                 Examples = new string[] {
                     "test cli -a 12 --b=\"hello friend\"",
@@ -37,7 +37,7 @@ namespace CLISample
 
             new Command
             {
-                Namespace = "sample two",
+                Name = "sample two",
                 Handler = args =>
                 {
                     Console.WriteLine("i am sample two!");
@@ -46,7 +46,7 @@ namespace CLISample
 
             new Command
             {
-                Namespace = "test no handler",
+                Name = "test no handler",
                 Description = "run this command during startup to receive exit code -1"
             };
         }
