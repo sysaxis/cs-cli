@@ -72,6 +72,17 @@ namespace CLI
             return tags.Any(HasParam);
         }
 
+        public bool HasFlag(string tag)
+        {
+            var arg = Find(a => a.Tag == tag);
+            return (arg != null && arg.RawValue == null);
+        }
+
+        public bool HasAnyFlag(params string[] tags)
+        {
+            return tags.Any(HasFlag);
+        }
+
         public static Args Parse(string input)
         {
             string[] parts = input.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);

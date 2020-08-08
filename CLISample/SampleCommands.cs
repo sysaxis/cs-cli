@@ -49,6 +49,22 @@ namespace CLISample
                 Name = "test no handler",
                 Description = "run this command during startup to receive exit code -1"
             };
+
+            new Command
+            {
+                Name = "ask",
+                Description = "ask a question",
+                Handler = args =>
+                {
+                    string question = args.Get("q", "question");
+                    if (args.HasFlag("print"))
+                    {
+                        Console.WriteLine("Q: " + question + "?");
+                    }
+
+                    Console.WriteLine("A: I don't know!");
+                }
+            };
         }
     }
 }
