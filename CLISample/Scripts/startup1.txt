@@ -1,0 +1,3 @@
+﻿calc(add: 10, sub: 200)
+calc(add: 90, sub: 20) -> calc1
+echo(message: $calc1.result)

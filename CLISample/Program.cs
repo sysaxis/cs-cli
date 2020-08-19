@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 using CLI;
 
@@ -10,12 +11,25 @@ namespace CLISample
         {
             Console.Title = "cli sample";
 
-            var commands = new Commands(true)
+            var commands = new Commands()
             {
                 Prompt = "$ "
             };
 
+            commands.UseStartupScript("./Scripts/startup1.txt");
+            commands.UseScript("./Scripts/test1.txt");
+
             new SampleCommands();
+            new CalculatorCommands();
+
+            new Command
+            {
+                Name = "echo",
+                Handler = a =>
+                {
+                    Console.WriteLine(a.Get("message"));
+                }
+            };
 
             // start command line loop
             commands.Initialize(args);

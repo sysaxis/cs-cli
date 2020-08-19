@@ -1,0 +1,5 @@
+﻿calc.reset()
+calc(add: $a)
+calc(add: $b) -> calc1
+
+echo(message: $calc1.result)

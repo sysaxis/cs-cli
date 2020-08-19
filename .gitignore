@@ -1,6 +1,7 @@
 # binaries and build objects
 **/**/bin
 **/**/obj
+**/Properties
 
 # vs
 .vs

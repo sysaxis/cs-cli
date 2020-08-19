@@ -10,4 +10,13 @@
     <ProjectReference Include="..\CLI\CLI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Scripts\startup1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Scripts\test1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
