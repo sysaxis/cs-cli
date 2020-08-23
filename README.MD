@@ -9,7 +9,7 @@ using CLI;
 
 class Program
 {
-    Commands commands = new Commands(true)
+    Commands commands = new Commands()
     {
         Prompt = "$ "
     };
