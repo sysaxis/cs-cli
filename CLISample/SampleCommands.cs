@@ -65,6 +65,18 @@ namespace CLISample
                     Console.WriteLine("A: I don't know!");
                 }
             };
+
+            new Command
+            {
+                Name = "sample async",
+                Description = "Sample command with async delegate",
+                AsyncHandler = async args =>
+                {
+                    Console.WriteLine("getting back to you in a sec...");
+                    await System.Threading.Tasks.Task.Delay(1000);
+                    Console.WriteLine("done");
+                }
+            };
         }
     }
 }

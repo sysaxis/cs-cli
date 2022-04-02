@@ -9,27 +9,30 @@ using CLI;
 
 class Program
 {
-    Commands commands = new Commands()
+    static void Main(string[] args)
     {
-        Prompt = "$ "
-    };
-
-    // add your commands here
-    new Command
-    {
-        Name = "echo",
-        Handler = args =>
+        Commands commands = new Commands()
         {
-            var num = args.Get<int>("a");
-            var str = args.Get("b");
+            Prompt = "$ "
+        };
 
-            Console.WriteLine("a=" + num);
-            Console.WriteLine("b=" + str);
-        }
-    };
+        // add your commands here
+        new Command
+        {
+            Name = "echo",
+            Handler = args =>
+            {
+                var num = args.Get<int>("a");
+                var str = args.Get("b");
 
-    // start command line loop
-    commands.Initialize();
+                Console.WriteLine("a=" + num);
+                Console.WriteLine("b=" + str);
+            }
+        };
+
+        // start command line loop
+        commands.Initialize(args);
+    }
 }
 ```
 
@@ -39,6 +42,33 @@ $ echo -a 10 --b="hello friend"
 $ a=10
 $ b=hello friend
 $
+```
+
+## Async Commands
+
+If you want async command to be awaited by the CLI then use `AsyncHandler`:
+```cs
+new Command
+{
+    Name = "example task2",
+    Description = "This command will be awaited for",
+    AsyncHandler = async args => {
+        Console.WriteLine("getting back to you in a sec...");
+        await System.Threading.Tasks.Task.Delay(1000);
+        Console.WriteLine("done");
+    }
+};
+
+new Command
+{
+    Name = "example task1",
+    Description = "This command will not be awaited for",
+    Handler = async args => {
+        Console.WriteLine("getting back to you in a sec...");
+        await System.Threading.Tasks.Task.Delay(1000);
+        Console.WriteLine("done");
+    }
+};
 ```
 
 ## Scripting
@@ -56,30 +86,33 @@ using CLI;
 
 class Program
 {
-    Commands commands = new Commands(true)
+    static void Main(string[] args)
     {
-        Prompt = "$ "
-    };
-
-    new ServerCommands();
-    new FsCommands();
-
-    new Command
-    {
-        Name = "echo",
-        Handler = a =>
+        Commands commands = new Commands(true)
         {
-            Console.WriteLine(a.Get("message", "m"));
-        }
-    };
+            Prompt = "$ "
+        };
 
-    // startup scripts are executed on startup and are not available as commands on runtime.
-    commands.UseStartupScript("./Scripts/startup1.txt");
+        new ServerCommands();
+        new FsCommands();
 
-    // runtime scripts are available just like predefined commands
-    commands.UseScript("./Scripts/server.dump.txt");
+        new Command
+        {
+            Name = "echo",
+            Handler = a =>
+            {
+                Console.WriteLine(a.Get("message", "m"));
+            }
+        };
 
-    commands.Initialize();
+        // startup scripts are executed on startup and are not available as commands on runtime.
+        commands.UseStartupScript("./Scripts/startup1.txt");
+
+        // runtime scripts are available just like predefined commands
+        commands.UseScript("./Scripts/server.dump.txt");
+
+        commands.Initialize(args);
+    }
 }
 ```
 

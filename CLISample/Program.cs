@@ -21,6 +21,7 @@ namespace CLISample
 
             new SampleCommands();
             new CalculatorCommands();
+            new FsCommands();
 
             new Command
             {

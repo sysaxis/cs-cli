@@ -1,23 +1,50 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace CLI
 {
     public class Command
     {
         public string Name { get; set; }
-        [Obsolete("Namespace is deprecated, use Name instead")]
-        public string Namespace
+
+        private Action<Context> action = null;
+        private Func<Context, Task> asyncAction = null;
+
+        public Action<Context> Handler
         {
             get
             {
-                return Name;
+                return action;
             }
             set
             {
-                Name = value;
+                if (asyncAction != null)
+                {
+                    throw new Exception("Command handler has already been defined");
+                }
+
+                action = value;
             }
         }
-        public Action<Context> Handler { get; set; }
+
+        public Func<Context, Task> AsyncHandler
+        {
+            get
+            {
+                return asyncAction;
+            }
+            set
+            {
+                if (action != null)
+                {
+                    throw new Exception("Command handler has already beed defined");
+                }
+
+                asyncAction = value;
+            }
+        }
+
+
         public string Description { get; set; }
         public string Example { get; set; }
         public string[] Examples { get; set; }
@@ -38,13 +65,14 @@ namespace CLI
         {
             try
             {
-                if (Handler == null)
+                if (Handler != null) Handler.Invoke(context);
+                else if (AsyncHandler != null) AsyncHandler.Invoke(context).Wait();
+                else
                 {
                     Console.WriteLine("Command \"{0}\" has no action!", Name);
                     return false;
                 }
 
-                Handler.Invoke(context);
                 return true;
             }
             catch (Exception ex)
