@@ -15,28 +15,28 @@ namespace CLI.Tests
 
             args = new string[] { "text" };
             count = ArgsParser.UnquoteArgVal(args, out text);
-            Assert.AreEqual(count, 0);
-            Assert.AreEqual(text, null);
+            Assert.AreEqual(0, count);
+            Assert.AreEqual(null, text);
 
             args = new string[] { "\"hello", "my", "dear", "friend\"", "---" };
             count = ArgsParser.UnquoteArgVal(args, out text);
-            Assert.AreEqual(count, 4);
-            Assert.AreEqual(text, "hello my dear friend");
+            Assert.AreEqual(4, count);
+            Assert.AreEqual("hello my dear friend", text);
 
             args = new string[] { "msg=\"hello", "friend\"" };
             count = ArgsParser.UnquoteArgVal(args, out text, offset: 4);
-            Assert.AreEqual(count, 2);
-            Assert.AreEqual(text, "hello friend");
+            Assert.AreEqual(2, count);
+            Assert.AreEqual("hello friend", text);
 
             args = new string[] { "'Dwayne", "\"The", "Rock\"", "Johnson'" };
             count = ArgsParser.UnquoteArgVal(args, out text);
-            Assert.AreEqual(count, 4);
-            Assert.AreEqual(text, "Dwayne \"The Rock\" Johnson");
+            Assert.AreEqual(4, count);
+            Assert.AreEqual("Dwayne \"The Rock\" Johnson", text);
 
             args = new string[] { "i", "see", "what", "you", "'did", "there'" };
             count = ArgsParser.UnquoteArgVal(args, out text, startIndex: 4);
-            Assert.AreEqual(count, 2);
-            Assert.AreEqual(text, "did there");
+            Assert.AreEqual(2, count);
+            Assert.AreEqual("did there", text);
         }
 
         private void AssertContains(ArgKvp[] actual, params ArgKvp[] expected)
@@ -61,10 +61,10 @@ namespace CLI.Tests
             ArgKvp[] args;
 
             args = Parser.Parse("example");
-            Assert.AreEqual(args.Length, 0);
+            Assert.AreEqual(1, args.Length);
 
             args = Parser.Parse("example1 example 2");
-            Assert.AreEqual(args.Length, 0);
+            Assert.AreEqual(3, args.Length);
 
             args = Parser.Parse(" -a 12 --b=\"hello friend\"");
             AssertContains(args, new ArgKvp
@@ -141,6 +141,21 @@ namespace CLI.Tests
                 Value = null
             });
 
+            args = Parser.Parse("200 -e 19 arg2");
+            AssertContains(args, new ArgKvp
+            {
+                Key = "#1",
+                Value = "200"
+            }, new ArgKvp
+            {
+                Key = "e",
+                Value = "19"
+            },
+            new ArgKvp
+            {
+                Key = "#2",
+                Value = "arg2"
+            });
 
             Parser = new ArgsParser(new ArgsParserOptions
             {
@@ -172,7 +187,7 @@ namespace CLI.Tests
             });
 
             args = Parser.Parse("-o 12 -c abc --myflag");
-            Assert.AreEqual(args.Length, 0);
+            Assert.AreEqual(5, args.Length);
 
             args = Parser.Parse("-o=12 -c=abc --myflag=");
             AssertContains(args, new ArgKvp

@@ -19,6 +19,15 @@ namespace CLISample
                     File.Copy(cnx.Get("from", "f"), cnx.Get("to", "t"));
                 }
             };
+
+            new Command
+            {
+                Name = "mv",
+                Handler = cnx =>
+                {
+                    File.Move(cnx.Get("#1"), cnx.Get("#2"));
+                }
+            };
         }
     }
 }

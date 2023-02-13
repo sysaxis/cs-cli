@@ -50,6 +50,37 @@ namespace CLI
             Console.Write(Prompt);
         }
 
+        private Command FindCommand(List<string> args)
+        {
+            if (args.Count == 0)
+            {
+                return null;
+            }
+
+            string cmd = "";
+            Command command = null;
+
+            while (args.Count > 0)
+            {
+                cmd += (cmd.Length > 0 ? " " : "") + args[0];
+                args.RemoveAt(0);
+
+                command = Find(c => c.Name == cmd);
+                if (command != null)
+                {
+                    break;
+                }
+            }
+
+            if (command == null)
+            {
+                Console.WriteLine($"Command '{cmd}' not found!");
+                Environment.Exit(-1);
+            }
+
+            return command;
+        }
+
         private void RunStartupCommand(string[] args)
         {
             if (args.Length == 0)
@@ -57,35 +88,18 @@ namespace CLI
                 return;
             }
 
-            string input = args.Aggregate((s, e) => s + " " + e);
-            string name = "";
-
-            int k = input.IndexOf(" -");
-            if (k > -1)
-            {
-                name = input.Substring(0, k);
-            }
-            else
-            {
-                name = input;
-            }
-
-            Command command = Find(c => c.Name == name);
-            if (command == null)
-            {
-                Console.WriteLine($"Command '{name}' not found!");
-                Environment.Exit(-1);
-                return;
-            }
+            List<string> argsl = args.ToList();
+            Command command = FindCommand(argsl);
 
             if (command.Handler == null)
             {
-                Console.WriteLine($"Command '{name}' has no action!");
+                Console.WriteLine($"Command '{command.Name}' has no action!");
                 Environment.Exit(-1);
                 return;
             }
 
-            Context context = new Context(args);
+            Context context = new Context(argsl.ToArray());
+
             try
             {
                 command.Handler.Invoke(context);
@@ -121,14 +135,10 @@ namespace CLI
                 return;
             }
 
-            Command command = Find(c => c.Name == name);
-            if (command == null)
-            {
-                Console.WriteLine("Command {0} not found!", name);
-                return;
-            }
+            List<string> argsl = input.Split(' ').ToList();
+            Command command = FindCommand(argsl);
 
-            Context context = new Context(rawArgs);
+            Context context = new Context(argsl.ToArray());
             command.Run(context);
         }
 

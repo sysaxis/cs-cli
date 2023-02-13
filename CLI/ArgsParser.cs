@@ -69,6 +69,7 @@ namespace CLI
             List<ArgKvp> parsedArgs = new List<ArgKvp>();
 
             int k = -1;
+            int argc = 1;
             ArgKvp arg = null;
 
             while (++k < partsList.Count)
@@ -118,6 +119,15 @@ namespace CLI
                     continue;
                 }
 
+                if (key == null && arg == null)
+                {
+                    arg = new ArgKvp
+                    {
+                        Key = $"#{argc++}"
+                    };
+                    parsedArgs.Add(arg);
+                }
+
                 if (arg != null)
                 {
                     k += UnquoteArgVal(partsList.ToArray(), out string argval, k);
@@ -131,6 +141,8 @@ namespace CLI
                     {
                         arg.Value = part.Trim();
                     }
+
+                    arg = null;
                 }
             }
 

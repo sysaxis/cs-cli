@@ -126,6 +126,11 @@ namespace CLI
             return result;
         }
 
+        public T? Get<T>(int index) where T : struct
+        {
+            return Get<T>("#" + index);
+        }
+
         public T Get<T>(T defaultValue, params string[] tags) where T : struct
         {
             T? result = null;
@@ -161,6 +166,11 @@ namespace CLI
                 if (result != null) break;
             }
             return result;
+        }
+
+        public string Get(int index)
+        {
+            return Get("#" + index);
         }
 
         public object GetRaw(string tag)

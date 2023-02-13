@@ -13,11 +13,11 @@ namespace CLISample
         {
             new Command
             {
-                Name = "test cli",
+                Name = "demo cli",
                 Description = "pass different args to showcase arg parsing",
                 Examples = new string[] {
-                    "test cli -a 12 --b=\"hello friend\"",
-                    "test cli -b hello -c friend"
+                    "demo cli -a 12 --b=\"hello friend\"",
+                    "demo cli -b hello -c friend"
                 },
                 Handler = args =>
                 {
@@ -46,7 +46,7 @@ namespace CLISample
 
             new Command
             {
-                Name = "test no handler",
+                Name = "demo no handler",
                 Description = "run this command during startup to receive exit code -1"
             };
 

@@ -7,9 +7,10 @@
     <Authors>Sysaxis</Authors>
     <Company>Sysaxis</Company>
     <RepositoryUrl>https://github.com/sysaxis/cs-cli</RepositoryUrl>
-    <PackageLicenseUrl>https://github.com/sysaxis/cs-cli/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryType>Git</RepositoryType>
     <Description>Simple CLI builder for NETCore applications</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
