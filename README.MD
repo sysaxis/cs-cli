@@ -30,6 +30,15 @@ class Program
             }
         };
 
+        new Command
+        {
+            Name = "add",
+            Handler = args =>
+            {
+                Console.WriteLine(args.Get<int>("#1") + args.Get<int>("#2"));
+            }
+        };
+
         // start command line loop
         commands.Initialize(args);
     }
@@ -42,6 +51,8 @@ $ echo -a 10 --b="hello friend"
 $ a=10
 $ b=hello friend
 $
+$ add 50 "-10"
+$ 40
 ```
 
 ## Async Commands

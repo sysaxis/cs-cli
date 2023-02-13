@@ -38,6 +38,16 @@ namespace CLISample
                     a.SetResult("result", Result);
                 }
             };
+
+
+            new Command
+            {
+                Name = "add",
+                Handler = args =>
+                {
+                    Console.WriteLine(args.Get<int>("#1") + args.Get<int>("#2"));
+                }
+            };
         }
     }
 }
