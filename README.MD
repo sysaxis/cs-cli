@@ -82,6 +82,56 @@ new Command
 };
 ```
 
+## Utilities
+
+### Prompting input
+
+```cs
+using static CLI.ConsoleUtil;
+
+string count = PromptInput("How many? ");
+
+// prompts for input, does not show typed characters in the console
+string password = PromptInput("Password: ", hideInput: true);
+```
+
+### Printing lists
+
+IEnumarable<T> objects can be selectively printed in a table structure.
+```cs
+using static CLI.ConsoleUtil;
+
+new Command
+{
+    Name = "ls",
+    Handler = cnx =>
+    {
+        string path = GetPath(cnx.Get("#1"));
+
+        var dirInfo = Directory.EnumerateFileSystemEntries(path).Select(p => new FileInfo(p)).ToList();
+
+        PrintList(dirInfo,
+            "CreationTime->Created(-20:yyyy-MM-dd HH:mm:ss)",
+            "Name(-50)",
+            "Attributes->Attrs");
+    }
+};
+```
+
+```sh
+$ ls
+Created              | Name                                               | Attrs
+2023-02-13 20:35:43    CLI.dll                                              Archive
+2023-02-13 20:35:43    CLI.pdb                                              Archive
+2023-02-13 20:35:43    CLISample.deps.json                                  Archive
+2023-02-13 20:35:43    CLISample.dll                                        Archive
+2023-02-13 20:35:43    CLISample.exe                                        Archive
+2023-02-13 20:35:43    CLISample.pdb                                        Archive
+2023-02-13 20:35:43    CLISample.runtimeconfig.dev.json                     Archive
+2023-02-13 20:35:43    CLISample.runtimeconfig.json                         Archive
+2023-02-13 20:35:43    Scripts                                              Directory
+```
+
 ## Scripting
 
 Create startup scripts and runtime scripts. Runtime scripts act as CLI commands.
