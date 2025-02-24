@@ -7,15 +7,10 @@ namespace CLI
     public class Commands : List<Command>
     {
         public string Prompt { get; set; } = "";
+        public bool TerminateOnUnknownCommand { get; set; } = true;
 
         private Scripting StartupScripts { get; }
         private Scripting RuntimeScripts { get; }
-
-        private ArgsParser DefaultArgsParser => new ArgsParser(new ArgsParserOptions
-        {
-            ArgPrefixes = new string[] { "--", "-" },
-            KeyValOps = new string[] { "=" }
-        });
 
         private ExecFunc ExecDelegate { get; }
 
@@ -50,7 +45,7 @@ namespace CLI
             Console.Write(Prompt);
         }
 
-        private Command FindCommand(List<string> args)
+        private Command FindCommand(List<string> args, bool strict = false)
         {
             if (args.Count == 0)
             {
@@ -75,7 +70,11 @@ namespace CLI
             if (command == null)
             {
                 Console.WriteLine($"Command '{cmd}' not found!");
-                Environment.Exit(-1);
+
+                if (strict || TerminateOnUnknownCommand)
+                {
+                    Environment.Exit(-1);
+                }
             }
 
             return command;
@@ -89,7 +88,7 @@ namespace CLI
             }
 
             List<string> argsl = args.ToList();
-            Command command = FindCommand(argsl);
+            Command command = FindCommand(argsl, true);
 
             if (command.Handler == null)
             {
@@ -137,6 +136,10 @@ namespace CLI
 
             List<string> argsl = input.Split(' ').ToList();
             Command command = FindCommand(argsl);
+            if (command == null)
+            {
+                return;
+            }
 
             Context context = new Context(argsl.ToArray());
             command.Run(context);
